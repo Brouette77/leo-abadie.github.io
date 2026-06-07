@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LÉO ABADIE — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #ffffff;
+  --yellow: #FFE000;
+  --navy: #050f28;
+  --red: #FF2525;
+  --green: #6fffb8;
+}
+
+html {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+body {
+  font-family: 'Manrope', sans-serif;
+  background: #19b4f6;
+  overflow-x: hidden;
+}
+
+/* ─── SECTIONS ─── */
+section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sky-bg {
+  position: absolute; inset: 0;
+  background: url('BACK_CIEL_1.png') center top / cover no-repeat;
+  z-index: 0;
+}
+
+/* ─── DECO (nuages, ballons, oiseaux) ─── */
+.deco {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+}
+.deco img { display: block; width: 100%; }
+
+/* Nuages — dérive douce horizontale */
+@keyframes drift-r { 0%,100%{transform:translateX(0)} 50%{transform:translateX(28px)} }
+@keyframes drift-l { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-28px)} }
+
+/* Ballons — lévitation verticale */
+@keyframes lev  { 0%,100%{transform:translateY(0)}            50%{transform:translateY(-16px)} }
+@keyframes lev2 { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-20px) rotate(2deg)} }
+
+/* Colombes — vol naturel SANS rotation de boucle → juste translation */
+@keyframes fly-r { 0%{transform:translate(0,0)}   40%{transform:translate(18px,-10px)}  100%{transform:translate(0,0)} }
+@keyframes fly-l { 0%{transform:translate(0,0)}   40%{transform:translate(-18px,-8px)}  100%{transform:translate(0,0)} }
+
+/* Montgolfière */
+@keyframes rise { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-22px) rotate(1deg)} }
+
+/* Avion : de droite vers gauche */
+@keyframes plane {
+  0%   { right: -60%; opacity:1; }
+  95%  { right: 110%; opacity:1; }
+  100% { right: 110%; opacity:0; }
+}
+
+/* Sol */
+.sol {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 115%; z-index: 4; pointer-events: none;
+}
+.sol img { width: 100%; display: block; }
+
+/* ─── NAV DOTS ─── */
+.dots {
+  position: fixed; right: 1.4rem; top: 50%; transform: translateY(-50%);
+  z-index: 300; display: flex; flex-direction: column; gap: 10px;
+}
+.dot {
+  width: 9px; height: 9px;
+  border: 2px solid rgba(255,255,255,.75);
+  border-radius: 50%; cursor: pointer;
+  background: transparent;
+  transition: background .2s, transform .2s, border-color .2s;
+  position: relative;
+}
+.dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: .7rem;
+  white-space: nowrap;
+  color: rgba(255,255,255,.6);
+  opacity: 0;
+  transition: opacity .2s;
+  font-weight: 600;
+  letter-spacing: .05em;
+}
+.dot:hover::after { opacity: 1; }
+.dot.on { background: var(--white); border-color: var(--white); transform: scale(1.7); }
+.dot.on::after { opacity: 1; color: var(--white); }
+
+/* ─── REVEAL ─── */
+.reveal { opacity:0; transform:translateY(55px); transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1); }
+.reveal.on { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.07s} .d2{transition-delay:.16s} .d3{transition-delay:.25s}
+.d4{transition-delay:.34s} .d5{transition-delay:.43s} .d6{transition-delay:.52s}
+
+/* ════════════════════════════
+   §1 HERO
+════════════════════════════ */
+#s1 .hero-inner {
+  position: relative; z-index: 10;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 80px;
+}
+
+.hero-name {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(5rem, 17vw, 15rem);
+  line-height: .85;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 3px 40px rgba(0,30,100,.3);
+}
+
+.hero-sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(.75rem, 1.5vw, 1rem);
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.9);
+  margin-top: 1.2rem;
+  background: rgba(0,0,0,.35);
+  padding: .45rem 1.4rem;
+  display: inline-block;
+  backdrop-filter: blur(6px);
+}
+
+/* positions assets §1 */
+#s1 .montgolf { width: clamp(75px,9vw,140px); top: 8%; left: 5%; animation: rise 7s ease-in-out infinite; }
+#s1 .bal-r    { width: clamp(45px,5.5vw,82px); top: 9%; right: 12%; animation: lev 5s ease-in-out infinite .5s; }
+#s1 .bal-g    { width: clamp(40px,5vw,75px); bottom: 26%; left: 9%; animation: lev2 6s ease-in-out infinite 1.2s; }
+#s1 .bal-b    { width: clamp(38px,4.5vw,68px); bottom: 30%; right: 8%; animation: lev 4.5s ease-in-out infinite 2.1s; }
+#s1 .col-j1   { width: clamp(48px,5.5vw,82px); top: 28%; left: 13%; animation: fly-r 9s ease-in-out infinite; }
+#s1 .col-j2   { width: clamp(44px,5vw,75px); top: 33%; right: 11%; animation: fly-l 10s ease-in-out infinite 2s; }
+#s1 .n1 { width: clamp(150px,20vw,320px); top:  4%; left: -2%; animation: drift-r 15s ease-in-out infinite; }
+#s1 .n2 { width: clamp(120px,16vw,260px); top: 13%; right:-2%; animation: drift-l 19s ease-in-out infinite 3s; }
+#s1 .n3 { width: clamp( 90px,12vw,200px); top: 48%; left: 22%; animation: drift-r 21s ease-in-out infinite 6s; }
+#s1 .n4 { width: clamp(110px,14vw,220px); bottom:22%; right:16%; animation: drift-l 17s ease-in-out infinite 1s; }
+
+.plane-wrapper {
+  position: absolute;
+  bottom: 72px;
+  right: -60%;
+  z-index: 5;
+  animation: plane 20s linear 2s infinite;
+  pointer-events: none;
+  user-select: none;
+  width: clamp(280px,42vw,660px);
+}
+
+.plane-wrapper img {
+  width: 100%;
+  transform: scaleX(-1);
+  display: block;
+}
+
+.plane-banner {
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  right: 16%;
+  transform: translateY(-50%);
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(0.5rem, 1vw, 0.8rem);
+  letter-spacing: 0.06em;
+  color: #555;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ════════════════════════════
+   §2 COMPÉTENCES
+════════════════════════════ */
+#s2 .inner {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 1100px;
+  padding: 0 2.5rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 60px;
+  gap: 2rem;
+}
+
+#s2 .sec-title { text-align: left; margin-bottom: .2rem; }
+
+.skills-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+/* bloc générique */
+.sk-block {
+  background: rgba(5,15,40,.35);
+  border: 1.5px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(14px);
+  padding: 1.6rem 2rem;
+  border-radius: 12px;
+  transition: border-color .2s, transform .2s;
+}
+.sk-block:hover {
+  border-color: rgba(111,255,184,.45);
+  transform: translateY(-4px);
+}
+.sk-block-label {
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 1.1rem;
+}
+
+/* Langages : barres de progression */
+.lang-list { display: flex; flex-direction: column; gap: .85rem; }
+.lang-row { display: flex; flex-direction: column; gap: .3rem; }
+.lang-row-head {
+  display: flex; justify-content: space-between;
+  font-size: .82rem; font-weight: 700; color: var(--white);
+  letter-spacing: .04em;
+}
+.lang-row-head span:last-child { color: rgba(255,255,255,.45); font-weight: 600; }
+.lang-bar {
+  height: 5px;
+  background: rgba(255,255,255,.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.lang-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), #00cfff);
+  border-radius: 99px;
+  transition: width .8s cubic-bezier(.16,1,.3,1);
+}
+
+/* Outils : pills compacts */
+.tools-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+.tool-pill {
+  font-size: .78rem; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: .35rem .85rem;
+  border-radius: 6px;
+  border: 1.5px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.07);
+  transition: all .15s;
+  cursor: default;
+}
+.tool-pill:hover { background: rgba(111,255,184,.15); border-color: var(--green); color: var(--green); }
+.tool-pill.hi { border-color: rgba(111,255,184,.5); color: var(--green); background: rgba(111,255,184,.1); }
+
+/* Langues humaines : drapeaux + niveau */
+.human-lang-list { display: flex; flex-direction: column; gap: 1rem; }
+.human-lang-row {
+  display: flex; align-items: center; gap: 1rem;
+}
+.human-lang-row img {
+  width: 36px; height: 36px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.2);
+}
+.human-lang-info { display: flex; flex-direction: column; gap: .15rem; flex: 1; }
+.human-lang-name { font-size: .9rem; font-weight: 700; color: var(--white); }
+.human-lang-level { font-size: .75rem; color: rgba(255,255,255,.5); letter-spacing: .06em; text-transform: uppercase; }
+.human-lang-badge {
+  font-size: .72rem; font-weight: 800; letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .22rem .7rem;
+  border-radius: 4px;
+  background: rgba(111,255,184,.15);
+  border: 1.5px solid rgba(111,255,184,.4);
+  color: var(--green);
+}
+
+/* Qualités */
+.qualities-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+.q-pill {
+  font-size: .8rem; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .4rem 1rem;
+  border-radius: 50px;
+  background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.8);
+  transition: all .15s;
+  cursor: default;
+}
+.q-pill:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.5); color: var(--white); }
+
+.sec-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(3.5rem,8.5vw,8rem);
+  line-height: .88;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 3px 30px rgba(0,30,100,.2);
+}
+
+.about-p {
+  font-size: .98rem; line-height: 1.75;
+  color: rgba(255,255,255,.9);
+  margin-top: 1.1rem;
+  padding-left: 1rem;
+  border-left: 3px solid rgba(255,255,255,.5);
+}
+
+.block-lbl {
+  font-family: 'Manrope', sans-serif;
+  font-size: .62rem; letter-spacing: .2em;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase; margin-bottom: .45rem; margin-top: 1.2rem;
+}
+.block-lbl:first-of-type { margin-top: 0; }
+
+.tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .9rem; }
+.tag {
+  font-family: 'Manrope', sans-serif;
+  font-size: .82rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .38rem .9rem;
+  background: rgba(255,255,255,.15);
+  border: 1.5px solid rgba(255,255,255,.35);
+  color: var(--white);
+  cursor: default;
+  transition: background .15s, color .15s, transform .15s;
+  border-radius: 4px;
+}
+.tag:hover { background: var(--white); color: var(--navy); transform: rotate(-2deg) scale(1.07); }
+.tag.hot { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.08); }
+
+#s2 .montgolf { width: clamp(65px,8vw,120px); top: 7%; right: 3%; animation: rise 8.5s ease-in-out infinite; }
+#s2 .col-v    { width: clamp(50px,5.5vw,82px); bottom:22%; left:2%; animation: fly-r 11s ease-in-out infinite; }
+#s2 .bal-r    { width: clamp(42px,5vw,72px); bottom:28%; right:4%; animation: lev 5.5s ease-in-out infinite 1s; }
+#s2 .n1 { width: clamp(130px,17vw,250px); top: 5%; left: 0; animation: drift-r 17s ease-in-out infinite 2s; }
+#s2 .n5 { width: clamp( 95px,12vw,190px); bottom:18%; right:0; animation: drift-l 21s ease-in-out infinite 4s; }
+
+/* ─── FORMATIONS ─── */
+#s3 .inner {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 860px;
+  padding: 0 3rem;
+  margin-bottom: 60px;
+  display: flex; flex-direction: column; gap: 2.5rem;
+}
+
+.form-list {
+  display: flex; flex-direction: column; gap: 1.2rem;
+  margin-top: .4rem;
+}
+
+.form-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+.form-year-col {
+  display: flex; flex-direction: column; align-items: center;
+  gap: .6rem; padding-top: .3rem;
+}
+.form-year-badge {
+  font-family: 'Anton', sans-serif;
+  font-size: .75rem;
+  letter-spacing: .06em;
+  color: rgba(255,255,255,.5);
+  text-align: center;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.form-line {
+  width: 2px;
+  flex: 1;
+  min-height: 40px;
+  background: linear-gradient(to bottom, rgba(111,255,184,.5), rgba(111,255,184,.0));
+  border-radius: 2px;
+}
+
+.form-card {
+  padding: 1.4rem 1.8rem;
+  background: rgba(5,15,40,.35);
+  border: 1.5px solid rgba(255,255,255,.13);
+  border-left: 3px solid var(--green);
+  backdrop-filter: blur(14px);
+  border-radius: 0 10px 10px 0;
+  transition: transform .18s, border-color .18s;
+  cursor: default;
+}
+.form-card:hover {
+  transform: translateX(6px);
+  border-left-color: #fff;
+  border-color: rgba(255,255,255,.3);
+}
+.form-card-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(1.1rem,2.4vw,1.6rem);
+  text-transform: uppercase;
+  color: var(--green);
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+.form-card-sub {
+  font-size: .88rem; font-weight: 600; color: var(--white);
+  line-height: 1.4; margin-bottom: .5rem;
+}
+.form-card-detail {
+  font-size: .8rem; color: rgba(255,255,255,.55);
+  line-height: 1.5;
+}
+.form-card-mention {
+  display: inline-block; margin-top: .7rem;
+  font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .22rem .8rem; border-radius: 4px;
+  background: rgba(111,255,184,.12);
+  border: 1.5px solid rgba(111,255,184,.35);
+  color: var(--green);
+}
+
+#s3 .n2 { width: clamp(120px,16vw,250px); top: 3%; left: 0; animation: drift-r 16s ease-in-out infinite; }
+#s3 .n4 { width: clamp( 95px,12vw,185px); bottom:20%; right:0; animation: drift-l 20s ease-in-out infinite 3s; }
+#s3 .bal-b  { width: clamp(45px,5.5vw,82px); top: 7%; right: 4%; animation: lev2 6s ease-in-out infinite; }
+#s3 .col-j1 { width: clamp(46px,5vw,78px); top: 10%; left: 3%; animation: fly-r 9.5s ease-in-out infinite 2s; }
+
+/* ════════════════════════════
+   §4 EXPÉRIENCES PROFESSIONNELLES
+════════════════════════════ */
+#s4 .inner {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 980px;
+  padding: 0 3.5rem;
+  margin-bottom: 60px;
+}
+
+.cards { display: flex; flex-direction: column; gap: .75rem; margin-top: 2rem; }
+.card {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 1.5rem; padding: 1.2rem 1.6rem;
+  background: rgba(5,15,40,.35);
+  border: 1.5px solid rgba(255,255,255,.14);
+  border-left: 4px solid rgba(255,255,255,.6);
+  backdrop-filter: blur(14px);
+  cursor: default;
+  transition: transform .18s, background .18s;
+  flex-wrap: wrap;
+  border-radius: 8px;
+}
+.card:hover { transform: translateX(8px) rotate(-.25deg); background: rgba(5,15,40,.5); }
+
+.card-info { flex: 1; min-width: 300px; }
+.card .co {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(1.4rem,3.2vw,2.2rem);
+  text-transform: uppercase; color: var(--white);
+}
+.card .ro {
+  font-size: .76rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.55); margin-top: .15rem;
+}
+.card .desc {
+  font-size: .85rem;
+  color: rgba(255,255,255,.75);
+  line-height: 1.6;
+  margin-top: .6rem;
+  padding-top: .6rem;
+  border-top: 1px solid rgba(255,255,255,.15);
+}
+.card .dt {
+  font-family: 'Anton', sans-serif; font-size: .9rem;
+  color: var(--white); white-space: nowrap;
+  letter-spacing: .07em; text-align: right;
+  opacity: .8;
+}
+.card.now .dt { opacity: 1; }
+.card.now { border-left-color: var(--green); }
+.card.now .co { color: var(--green); }
+.co-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color .2s, opacity .2s;
+}
+.co-link:hover {
+  border-bottom-color: currentColor;
+  opacity: .8;
+}
+
+#s4 .montgolf { width: clamp(65px,8vw,115px); top: 7%; right: 3%; animation: rise 9s ease-in-out infinite; }
+#s4 .col-j2 { width: clamp(42px,5vw,74px); bottom: 28%; left: 2%; animation: fly-l 11s ease-in-out infinite; }
+#s4 .bal-b  { width: clamp(40px,4.5vw,68px); top: 12%; left: 4%; animation: lev 5s ease-in-out infinite .8s; }
+#s4 .n3 { width: clamp(110px,15vw,230px); top: 4%; left: 0; animation: drift-r 18s ease-in-out infinite; }
+#s4 .n5 { width: clamp( 90px,11vw,175px); bottom: 18%; right: 0; animation: drift-l 22s ease-in-out infinite 2s; }
+
+/* ════════════════════════════
+   §5 PROJETS
+════════════════════════════ */
+#s5 .inner {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 1080px;
+  padding: 0 3.5rem;
+  margin-bottom: 60px;
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.proj-grid a {
+  text-decoration: none;
+  color: inherit;
+}
+.proj-card {
+  background: rgba(255,255,255,.13);
+  border: 1.5px solid rgba(255,255,255,.25);
+  backdrop-filter: blur(10px);
+  padding: 1.3rem 1.2rem;
+  cursor: default;
+  transition: transform .18s, background .18s;
+  display: flex; flex-direction: column; gap: .8rem;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.proj-card:hover { transform: rotate(-.5deg) translateY(-5px); background: rgba(255,255,255,.22); }
+.proj-card .proj-img {
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.05));
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  color: rgba(255,255,255,.4);
+  text-align: center;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.proj-card .proj-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.proj-card .proj-name {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(1.1rem,2vw,1.5rem);
+  text-transform: uppercase; color: var(--white);
+}
+.proj-card .proj-tech {
+  font-size: .78rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--green);
+}
+.proj-card .proj-desc {
+  font-size: .85rem;
+  color: rgba(255,255,255,.75);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+#s5 .montgolf { width: clamp(65px,8vw,115px); top: 7%; right: 3%; animation: rise 9s ease-in-out infinite; }
+#s5 .col-v { width: clamp(40px,4.5vw,70px); bottom: 26%; right: 6%; animation: fly-l 9s ease-in-out infinite 3s; }
+#s5 .bal-r  { width: clamp(44px,5vw,76px); top: 11%; right: 9%; animation: lev 5s ease-in-out infinite .6s; }
+#s5 .n1 { width: clamp(120px,16vw,240px); top: 5%; right: 0; animation: drift-l 18s ease-in-out infinite; }
+#s5 .n3 { width: clamp( 90px,12vw,180px); bottom: 20%; left: 0; animation: drift-r 22s ease-in-out infinite 2s; }
+
+#s5 .avion {
+  width: clamp(270px,40vw,620px);
+  bottom: 72px;
+  transform: scaleX(-1);
+  animation: plane 22s linear 1s infinite;
+  z-index: 5;
+}
+
+/* ════════════════════════════
+   §6 CONTACT
+════════════════════════════ */
+#s6 .inner {
+  position: relative; z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+  gap: 2rem;
+}
+
+.cont-h {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: .9;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 3px 30px rgba(0,30,100,.2);
+}
+
+.cont-tagline {
+  font-size: clamp(.85rem,1.5vw,1.1rem);
+  color: rgba(255,255,255,.6);
+  font-weight: 500;
+  letter-spacing: .04em;
+  margin-top: -.8rem;
+}
+
+.cont-intro {
+  max-width: 520px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: -0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.contact-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  background: rgba(5,15,40,.3);
+  border: 1.5px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(14px);
+  padding: 1.2rem 2rem;
+  border-radius: 12px;
+  flex-wrap: wrap;
+}
+
+.contact-email {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--white);
+  font-size: clamp(.8rem, 1.2vw, .95rem);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.contact-email:hover { color: var(--green); }
+
+.email-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.social-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 50%;
+  color: rgba(255,255,255,.7);
+  transition: all .2s;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.social-icon:hover {
+  color: var(--green);
+  border-color: var(--green);
+  background: rgba(111,255,184,.1);
+}
+
+.cv-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem 1.3rem;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: .78rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 50px;
+  border: 2px solid var(--green);
+  color: var(--green);
+  background: rgba(111,255,184,.08);
+  transition: all .2s;
+}
+.cv-dl-btn:hover {
+  background: var(--green);
+  color: var(--navy);
+  transform: translateY(-2px);
+}
+
+
+
+#s6 .montgolf { width: clamp(70px,9vw,130px); top: 8%; left: 5%; animation: rise 8s ease-in-out infinite; }
+#s6 .col-v { width: clamp(40px,4.5vw,70px); bottom: 26%; right: 6%; animation: fly-l 9s ease-in-out infinite 3s; }
+#s6 .bal-r  { width: clamp(44px,5vw,76px); top: 11%; right: 9%; animation: lev 5s ease-in-out infinite .6s; }
+#s6 .n1 { width: clamp(120px,16vw,240px); top: 5%; right: 0; animation: drift-l 18s ease-in-out infinite; }
+#s6 .n3 { width: clamp( 90px,12vw,180px); bottom: 20%; left: 0; animation: drift-r 22s ease-in-out infinite 2s; }
+
+#s6 .avion {
+  width: clamp(270px,40vw,620px);
+  bottom: 72px;
+  transform: scaleX(-1);
+  animation: plane 22s linear 1s infinite;
+  z-index: 5;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  #s2 .inner { padding: 0 1.5rem; }
+  
+  .skills-grid { grid-template-columns: 1fr; }
+  
+  .skill-card { padding: 1.5rem; }
+  
+  #s4 .inner { grid-template-columns: 1fr; padding: 0 2rem; }
+  
+  .proj-grid { grid-template-columns: 1fr; }
+  
+  .card { flex-direction: column; }
+  .card .dt { width: 100%; text-align: left; }
+  
+  .dots { right: .8rem; gap: 8px; }
+  .dot::after { font-size: .65rem; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="dots">
+  <div class="dot on" data-t="s1" data-label="Accueil"></div>
+  <div class="dot" data-t="s2" data-label="Compétences"></div>
+  <div class="dot" data-t="s3" data-label="Formations"></div>
+  <div class="dot" data-t="s4" data-label="Expériences"></div>
+  <div class="dot" data-t="s5" data-label="Projets"></div>
+  <div class="dot" data-t="s6" data-label="Contact"></div>
+</div>
+
+<section id="s1">
+  <div class="sky-bg"></div>
+
+  <img class="deco montgolf" src="MONTGOLFIERE_BLEU.png" alt="">
+  <img class="deco bal-r"    src="BALLON_04.png" alt="">
+  <img class="deco bal-g"    src="BALLON_05.png" alt="">
+  <img class="deco bal-b"    src="BALLON_06.png" alt="">
+  <img class="deco col-j1"   src="COLOMBE_JAUNE_01.png" alt="">
+  <img class="deco col-j2"   src="COLOMBE_JAUNE_02.png" alt="">
+
+  <div class="plane-wrapper">
+    <div class="plane-banner">JE SUIS À LA RECHERCHE D'UNE ALTERNANCE</div>
+    <img src="AVION_FOOTER.png" alt="">
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-name reveal">LÉO</div>
+    <div class="hero-name reveal d1">ABADIE</div>
+    <div class="hero-sub reveal d2">Étudiant B.U.T. Informatique • Alternance</div>
+  </div>
+
+  <div class="sol"><img src="SOL_FLEURS_1.png" alt=""></div>
+</section>
+
+<section id="s2">
+  <div class="sky-bg"></div>
+
+  <img class="deco n1" src="NUAGE_01.png" alt="">
+  <img class="deco n5" src="NUAGE_05.png" alt="">
+  <img class="deco montgolf" src="MONTGOLFIERE_BLEU.png" alt="">
+  <img class="deco bal-r" src="BALLON_04.png" alt="">
+  <img class="deco col-v" src="COLOMBE_VERTE_02.png" alt="">
+
+  <div class="inner">
+    <h2 class="sec-title reveal">COMPÉTENCES</h2>
+
+    <div class="skills-layout reveal d1">
+
+      <div class="sk-block">
+        <div class="sk-block-label">Langages &amp; Frameworks</div>
+        <div class="lang-list">
+          <div class="lang-row">
+            <div class="lang-row-head"><span>Python</span><span>Bases solides</span></div>
+            <div class="lang-bar"><div class="lang-fill" style="width:62%"></div></div>
+          </div>
+          <div class="lang-row">
+            <div class="lang-row-head"><span>Kotlin</span><span>Bases solides</span></div>
+            <div class="lang-bar"><div class="lang-fill" style="width:58%"></div></div>
+          </div>
+          <div class="lang-row">
+            <div class="lang-row-head"><span>HTML / CSS</span><span>Bases solides</span></div>
+            <div class="lang-bar"><div class="lang-fill" style="width:45%"></div></div>
+          </div>
+          <div class="lang-row">
+            <div class="lang-row-head"><span>Golang</span><span>Notions</span></div>
+            <div class="lang-bar"><div class="lang-fill" style="width:30%"></div></div>
+          </div>
+          <div class="lang-row">
+            <div class="lang-row-head"><span>SQL</span><span>Notions</span></div>
+            <div class="lang-bar"><div class="lang-fill" style="width:28%"></div></div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="sk-block">
+        <div class="sk-block-label">Langues</div>
+        <div class="human-lang-list">
+          <div class="human-lang-row">
+            <img src="uklangue2.jpg" alt="UK">
+            <div class="human-lang-info">
+              <span class="human-lang-name">Anglais</span>
+              <span class="human-lang-level">Certification Cambridge</span>
+            </div>
+            <span class="human-lang-badge">B2</span>
+          </div>
+          <div class="human-lang-row">
+            <img src="spainlangue.jpg" alt="ES">
+            <div class="human-lang-info">
+              <span class="human-lang-name">Espagnol</span>
+              <span class="human-lang-level">Niveau intermédiaire</span>
+            </div>
+            <span class="human-lang-badge">B1</span>
+          </div>
+          <div class="human-lang-row">
+            <img src="portugal.jpg" alt="ES">
+            <div class="human-lang-info">
+              <span class="human-lang-name">Portugais</span>
+              <span class="human-lang-level">Notions</span>
+            </div>
+            <span class="human-lang-badge">A2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sk-block">
+        <div class="sk-block-label">Qualités personnelles</div>
+        <div class="qualities-row">
+          <span class="q-pill">Dynamique</span>
+          <span class="q-pill">Esprit d'équipe</span>
+          <span class="q-pill">Rigueur</span>
+          <span class="q-pill">Autodiscipline</span>
+          <span class="q-pill">Ponctualité</span>
+          <span class="q-pill">Réactivité</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sol"><img src="SOL_FLEURS_1.png" alt=""></div>
+</section>
+
+<section id="s3">
+  <div class="sky-bg"></div>
+
+  <img class="deco n2" src="NUAGE_02.png" alt="">
+  <img class="deco n4" src="NUAGE_04.png" alt="">
+  <img class="deco bal-b" src="BALLON_06.png" alt="">
+  <img class="deco col-j1" src="COLOMBE_JAUNE_01.png" alt="">
+
+  <div class="inner">
+    <h2 class="sec-title reveal">FORMATIONS</h2>
+    
+    <div class="form-list reveal d2">
+
+      <div class="form-item">
+        <div class="form-year-col">
+          <div class="form-year-badge">2025<br>→<br>2028</div>
+          <div class="form-line"></div>
+        </div>
+        <div class="form-card reveal d3">
+          <div class="form-card-title">B.U.T. Informatique</div>
+          <div class="form-card-sub">Bachelor Universitaire de Technologie</div>
+          <div class="form-card-detail">IUT de Nantes — Site Joffre</div>
+          <span class="form-card-mention">En cours</span>
+        </div>
+      </div>
+
+      <div class="form-item">
+        <div class="form-year-col">
+          <div class="form-year-badge">2024<br>→<br>2025</div>
+          <div class="form-line"></div>
+        </div>
+        <div class="form-card reveal d4">
+          <div class="form-card-title">Baccalauréat Général</div>
+          <div class="form-card-sub">Spécialités : Mathématiques • NSI</div>
+          <div class="form-card-detail">Lycée Monge la Chauvinière, Nantes</div>
+          <span class="form-card-mention">Mention Bien</span>
+        </div>
+      </div>
+
+      <div class="form-item">
+        <div class="form-year-col">
+          <div class="form-year-badge">2021<br>→<br>2022</div>
+        </div>
+        <div class="form-card reveal d5">
+          <div class="form-card-title">Brevet des Collèges</div>
+          <div class="form-card-sub">Diplôme national du brevet</div>
+          <div class="form-card-detail">Collège la Coutancière, La Chapelle-sur-Erdre</div>
+          <span class="form-card-mention">Mention Très Bien</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sol"><img src="SOL_FLEURS_1.png" alt=""></div>
+</section>
+
+<section id="s4">
+  <div class="sky-bg"></div>
+
+  <img class="deco n3" src="NUAGE_03.png" alt="">
+  <img class="deco n5" src="NUAGE_05.png" alt="">
+  <img class="deco montgolf" src="MONTGOLFIERE_BLEU.png" alt="">
+  <img class="deco bal-b" src="BALLON_05.png" alt="">
+  <img class="deco col-j2" src="COLOMBE_JAUNE_02.png" alt="">
+
+  <div class="inner">
+    <h2 class="sec-title reveal" style="font-size:clamp(2rem,5.5vw,5.5rem);margin-bottom:1.8rem;">EXPÉRIENCES</h2>
+    
+    <div class="cards">
+      <div class="card now reveal d1">
+        <div class="card-info">
+          <div class="co"><a href="https://www.magasins-u.com" target="_blank" rel="noopener" class="co-link">HYPER U</a></div>
+          <div class="ro">Préparateur e-commerce (CDI) • La Chapelle-sur-Erdre</div>
+          <div class="desc">
+            Préparation et gestion autonome des commandes en ligne. Travail d'équipe, rigueur, réactivité face à l'imprévu. Adaptation rapide aux outils logistiques et informatiques.
+          </div>
+        </div>
+        <div class="dt">NOV. 2025 →</div>
+      </div>
+
+      <div class="card reveal d2">
+        <div class="card-info">
+          <div class="co"><a href="https://www.lumiplan.com" target="_blank" rel="noopener" class="co-link">Lumiplan</a></div>
+          <div class="ro">Stagiaire • Saint-Herblain</div>
+          <div class="desc">
+            Ce stage m'a permis de mieux comprendre le codage, le fonctionnement des services IT et le travail en équipe avec des méthodes comme Agile Scrum.
+          </div>
+        </div>
+        <div class="dt">JAN. 2025</div>
+      </div>
+
+      <div class="card reveal d3">
+        <div class="card-info">
+          <div class="co"><a href="https://www.groupe-sigma.com" target="_blank" rel="noopener" class="co-link">SIGMA</a></div>
+          <div class="ro">Stagiaire • La Chapelle-sur-Erdre</div>
+          <div class="desc">
+            Stage d'observation en entreprise. Découverte du fonctionnement d'une grande entreprise et plusieurs métiers liés à l'IT (Développeur, DevOps, Data Scientists).
+          </div>
+        </div>
+        <div class="dt">JAN. 2022</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sol"><img src="SOL_FLEURS_1.png" alt=""></div>
+</section>
+
+<section id="s5">
+  <div class="sky-bg"></div>
+
+  <img class="deco n3" src="NUAGE_03.png" alt="">
+  <img class="deco n5" src="NUAGE_05.png" alt="">
+  <img class="deco montgolf" src="MONTGOLFIERE_BLEU.png" alt="">
+  <img class="deco bal-b" src="BALLON_05.png" alt="">
+  <img class="deco col-j2" src="COLOMBE_JAUNE_02.png" alt="">
+
+  <div class="inner">
+    <h2 class="sec-title reveal" style="margin-bottom:0;">PROJETS</h2>
+    <a href="projet1.html">
+    <div class="proj-grid reveal d2">
+      <div class="proj-card reveal d3">
+        <div class="proj-img">
+          <img src="proj1/systeme_extension_g_1.png" alt="">
+        </div>
+        <div class="proj-name">Projet Particules</div>
+        <div class="proj-tech">Golang (Ebiten)</div>
+        <div class="proj-desc">Projet universitaire réalisé en trois semaines, en duo. L'objectif était de développer un système de particules en Go avec Ebiten, puis de l'enrichir progressivement avec des extensions au choix.</div>
+      </div>
+    </a>
+    <a href="https://gabgube.github.io/brake.github.io/index.html" target="_blank">
+      <div class="proj-card reveal d4">
+        <div class="proj-img">
+          <img src="proj2/sitebrake.png" alt="">
+        </div>
+        <div class="proj-name">SITE MARCHAND</div>
+        <div class="proj-tech">HTML / CSS</div>
+        <div class="proj-desc">Création d'un site en groupe de 3, le site devait contenir une page d'accueil, une page de login et un panier. Il est fictif et possède seulement ces 3 pages</div>
+      </div>
+    </a>
+    <a href="https://gabgube.itch.io/jeu" target="_blank">
+      <div class="proj-card reveal d5">
+        <div class="proj-img">
+          <img src="proj3/jeuEco.png" alt="">
+        </div>
+        <div class="proj-name">CEO Survival</div>
+        <div class="proj-tech">Golang</div>
+        <div class="proj-desc">Jeu de stratégie et simulation d'entreprise réalisé en groupe de 4 en 2-3 semaines. Le joueur incarne un PDG devant gérer ses ressources et prendre des décisions stratégiques pour survivre.</div>
+      </div>
+    </a>
+    </div>
+  </div>
+
+  <div class="sol"><img src="SOL_FLEURS_1.png" alt=""></div>
+</section>
+
+<section id="s6">
+  <div class="sky-bg"></div>
+
+  <img class="deco n1" src="NUAGE_01.png" alt="">
+  <img class="deco n3" src="NUAGE_03.png" alt="">
+  <img class="deco montgolf" src="MONTGOLFIERE_BLEU.png" alt="">
+  <img class="deco bal-r" src="BALLON_04.png" alt="">
+  <img class="deco col-v" src="COLOMBE_VERTE_02.png" alt="">
+
+  <img class="deco avion" src="AVION_FOOTER.png" alt="">
+
+  <div class="inner">
+    <h2 class="cont-h reveal">CONTACT</h2>
+    <p class="cont-intro reveal d1">Prêt à discuter de mon potentiel pour une alternance en développement ? Contactez-moi directement !</p>
+
+    <div class="contact-bar reveal d2">
+      <a href="https://mail.google.com/mail/?view=cm&to=leoabadie98@gmail.com&su=Alternance%20en%20développement%20-%20Portfolio" target="_blank" class="contact-email">
+        <span class="email-icon">✉</span>
+        leoabadie98@gmail.com
+      </a>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/leo-abadie" target="_blank" class="social-icon" title="LinkedIn">in</a>
+        <a href="CV-Leo-ABADIE.pdf" target="_blank" class="cv-dl-btn">⬇ Télécharger mon CV</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="sol"><img src="SOL_FLEURS_1.png" alt=""></div>
+</section>
+
+<script>
+// Scroll Snap - Force le snap à la section suivante
+let isScrolling = false;
+let scrollTimeout;
+
+window.addEventListener('wheel', (e) => {
+  if (isScrolling) {
+    e.preventDefault();
+    return;
+  }
+
+  const sections = document.querySelectorAll('section');
+  const scrollY = window.scrollY;
+  const currentSectionIndex = Math.round(scrollY / window.innerHeight);
+
+  isScrolling = true;
+
+  if (e.deltaY > 0) {
+    // Scroll vers le bas
+    const nextIndex = Math.min(currentSectionIndex + 1, sections.length - 1);
+    sections[nextIndex].scrollIntoView({ behavior: 'smooth' });
+  } else {
+    // Scroll vers le haut
+    const prevIndex = Math.max(currentSectionIndex - 1, 0);
+    sections[prevIndex].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 800);
+
+  e.preventDefault();
+}, { passive: false });
+
+// Reveal
+const io = new IntersectionObserver(e => {
+  e.forEach(x => { if(x.isIntersecting) x.target.classList.add('on'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Nav dots
+const secs = document.querySelectorAll('section');
+const dots = document.querySelectorAll('.dot');
+dots.forEach(d => d.addEventListener('click', () =>
+  document.getElementById(d.dataset.t).scrollIntoView({ behavior: 'smooth' })));
+const sio = new IntersectionObserver(e => {
+  e.forEach(x => {
+    if(x.isIntersecting) {
+      dots.forEach(d => d.classList.remove('on'));
+      const i = [...secs].indexOf(x.target);
+      if(dots[i]) dots[i].classList.add('on');
+    }
+  });
+}, { threshold: 0.5 });
+secs.forEach(s => sio.observe(s));
+</script>
+</body>
+</html>

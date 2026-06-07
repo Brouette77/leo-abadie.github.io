@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet 1 — Léo Abadie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #ffffff;
+  --navy: #050f28;
+  --green: #6fffb8;
+  --red: #FF2525;
+}
+html { overflow-x: hidden; }
+body {
+  font-family: 'Manrope', sans-serif;
+  background: #19b4f6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.sky-bg {
+  position: fixed; inset: 0;
+  background: url('BACK_CIEL_1.png') center top / cover no-repeat;
+  z-index: 0;
+}
+/* ─── NUAGES DÉCO ─── */
+@keyframes drift-r { 0%,100%{transform:translateX(0)} 50%{transform:translateX(28px)} }
+@keyframes drift-l { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-28px)} }
+.deco {
+  position: fixed;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* ─── BACK BUTTON ─── */
+.back-btn {
+  position: fixed;
+  top: 1.5rem; left: 1.8rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .55rem 1.2rem;
+  background: rgba(5,15,40,.4);
+  border: 1.5px solid rgba(255,255,255,.2);
+  backdrop-filter: blur(12px);
+  color: var(--white);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: .8rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 50px;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.back-btn:hover {
+  background: rgba(5,15,40,.65);
+  border-color: var(--green);
+  transform: translateX(-4px);
+}
+
+/* ─── MAIN LAYOUT ─── */
+.page-wrapper {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 7rem 2.5rem 5rem;
+}
+
+/* ─── HEADER PROJET ─── */
+.proj-header { margin-bottom: 3rem; }
+.proj-tag {
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: .8rem;
+  display: block;
+}
+.proj-title {
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  line-height: .88;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 3px 40px rgba(0,30,100,.3);
+  margin-bottom: 1.2rem;
+}
+.proj-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+}
+.meta-pill {
+  font-size: .75rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: .3rem .9rem;
+  border-radius: 50px;
+  border: 1.5px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.08);
+}
+.meta-pill.highlight {
+  border-color: rgba(111,255,184,.5);
+  color: var(--green);
+  background: rgba(111,255,184,.1);
+}
+.proj-intro {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,.85);
+  max-width: 680px;
+  padding-left: 1rem;
+  border-left: 3px solid rgba(255,255,255,.4);
+}
+
+/* ─── SCREENSHOTS GALLERY ─── */
+.proj-screenshots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: .8rem;
+  margin-bottom: 3rem;
+}
+.proj-screenshots .shot-main {
+  grid-column: 1 / -1;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.15);
+}
+.proj-screenshots .shot-secondary {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,.12);
+}
+.proj-screenshots img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .35s ease;
+}
+.proj-screenshots img:hover { transform: scale(1.04); }
+
+/* ─── CONTENT BLOCKS ─── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 620px) { .content-grid { grid-template-columns: 1fr; } }
+
+.info-block {
+  background: rgba(5,15,40,.35);
+  border: 1.5px solid rgba(255,255,255,.13);
+  backdrop-filter: blur(14px);
+  border-radius: 10px;
+  padding: 1.5rem 1.8rem;
+}
+.info-block.full { grid-column: 1 / -1; }
+.info-block-label {
+  font-size: .62rem; font-weight: 800;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 1rem;
+}
+.info-block p {
+  font-size: .9rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,.8);
+}
+.tech-list {
+  display: flex; flex-wrap: wrap; gap: .5rem;
+}
+.tech-pill {
+  font-size: .78rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: .35rem .85rem;
+  border-radius: 6px;
+  border: 1.5px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.07);
+}
+.learn-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: .55rem;
+}
+.learn-list li {
+  display: flex; align-items: flex-start; gap: .6rem;
+  font-size: .88rem; line-height: 1.5;
+  color: rgba(255,255,255,.8);
+}
+.learn-list li::before {
+  content: '✦';
+  color: var(--green);
+  font-size: .7rem;
+  margin-top: .2rem;
+  flex-shrink: 0;
+}
+
+/* ─── CTA ─── */
+.proj-links {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  margin-top: 2.5rem;
+}
+.proj-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .75rem 1.8rem;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: .82rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 50px;
+  border: 2px solid var(--white);
+  color: var(--navy);
+  background: var(--white);
+  transition: all .2s;
+}
+.proj-link-btn:hover { background: transparent; color: var(--white); transform: translateY(-2px); }
+.proj-link-btn.ghost { background: transparent; color: var(--white); }
+.proj-link-btn.ghost:hover { background: var(--white); color: var(--navy); }
+
+/* ─── REVEAL ─── */
+.reveal { opacity:0; transform:translateY(40px); transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1); }
+.reveal.on { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.08s} .d2{transition-delay:.17s} .d3{transition-delay:.26s} .d4{transition-delay:.35s}
+</style>
+</head>
+<body>
+
+<div class="sky-bg"></div>
+<img class="deco" style="width:clamp(130px,18vw,260px);top:4%;left:-1%;animation:drift-r 18s ease-in-out infinite;" src="NUAGE_01.png" alt="">
+<img class="deco" style="width:clamp(100px,13vw,200px);bottom:12%;right:-1%;animation:drift-l 22s ease-in-out infinite 3s;" src="NUAGE_01.png" alt="">
+
+<a href="index.html" class="back-btn">← Retour au portfolio</a>
+
+<div class="page-wrapper">
+
+  <div class="proj-header reveal">
+    <span class="proj-tag">Projet personnel — 2024</span>
+    <h1 class="proj-title">Système de particules</h1>
+    <div class="proj-meta">
+      <span class="meta-pill highlight">GOLANG (EBITEN)</span>
+    </div>
+    <p class="proj-intro">
+      Un système de particules colorées dynamiques créant des animations fluides et interactives. Ce projet explore la programmation graphique en Go avec Ebiten, combinant la physique des particules, les événements utilisateur et l'optimisation de performance pour un rendu temps réel impressionnant.
+    </p>
+  </div>
+
+  <div class="proj-screenshots reveal d1">
+    <div class="shot-main">
+      <img src="proj1/systeme_extension_g_1.png" alt="Système de particules - vue principale">
+    </div>
+    <div class="shot-secondary">
+      <img src="proj1/systeme_base.png" alt="Système de base">
+    </div>
+    <div class="shot-secondary">
+      <img src="proj1/systeme_extension_g_2.png" alt="Extension G2">
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div class="info-block reveal d1">
+      <div class="info-block-label">Technologies utilisées</div>
+      <div class="tech-list">
+        <span class="tech-pill">GOLANG (EBITEN)</span>
+      </div>
+    </div>
+
+    <div class="info-block reveal d2">
+      <div class="info-block-label">Contexte</div>
+      <p>Projet universitaire réalisé en trois semaines, en duo. Créé dans le cadre d'un travail pratique pour approfondir la programmation graphique et les concepts de physique appliquée aux animations.</p>
+    </div>
+
+    <div class="info-block full reveal d3">
+      <div class="info-block-label">Description détaillée</div>
+      <p>Le système génère et anime des particules colorées en temps réel, avec des interactions au clavier et à la souris. Les particules suivent des lois physiques pour des mouvements naturels et fluides. Le projet combine la gestion d'événements utilisateur avec un moteur de rendu optimisé, assurant une performance stable même avec un grand nombre de particules simultanées. Nous avons travaillé sur l'architecture du code pour le rendre modulaire et facilement extensible avec de nouvelles fonctionnalités et extensions.</p>
+    </div>
+
+    <div class="info-block full reveal d4">
+      <div class="info-block-label">Ce que j'ai appris</div>
+      <ul class="learn-list">
+        <li>Programmation avancée en Go/Golang avec la framework Ebiten</li>
+        <li>Implémentation de la physique des particules et des animations fluides</li>
+        <li>Gestion complète des événements clavier/souris pour l'interactivité</li>
+        <li>Optimisation de performance et rendu efficace en temps réel</li>
+      </ul>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+<script>
+const io = new IntersectionObserver(e => {
+  e.forEach(x => { if(x.isIntersecting) x.target.classList.add('on'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
